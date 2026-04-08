@@ -1,0 +1,17 @@
+name: app_suite
+
+packages:
+  - apps/**
+  - packages/**
+
+scripts:
+  get:
+    run: melos exec -- flutter pub get
+    description: Install dependencies for all workspace members.
+  analyze:
+    run: melos exec -- flutter analyze
+    description: Analyze every package and app in the monorepo.
+  test:
+    run: melos exec -- flutter test
+    description: Run tests across the workspace.
+

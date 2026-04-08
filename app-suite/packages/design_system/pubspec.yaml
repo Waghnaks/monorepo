@@ -1,0 +1,13 @@
+name: design_system
+description: Shared UI components for the app suite.
+publish_to: none
+version: 0.1.0
+resolution: workspace
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+  flutter: '>=3.24.0'
+
+dependencies:
+  flutter:
+    sdk: flutter

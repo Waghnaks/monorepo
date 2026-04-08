@@ -1,0 +1,22 @@
+name: partner_app
+description: Minimal partner Flutter app.
+publish_to: none
+version: 0.1.0+1
+resolution: workspace
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+  flutter: '>=3.24.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  auth_phone:
+    path: ../../packages/auth_phone
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
