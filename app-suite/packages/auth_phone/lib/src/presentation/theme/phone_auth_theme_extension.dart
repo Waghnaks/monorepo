@@ -8,10 +8,9 @@ class PhoneAuthThemeExtension extends ThemeExtension<PhoneAuthThemeExtension> {
     this.headingTextStyle,
     this.supportingTextStyle,
     this.actionTextStyle,
-    this.leadingValueTextStyle,
-    this.inputLabelTextStyle,
-    this.inputTextStyle,
-    this.inputHintTextStyle,
+    this.valueTextStyle,
+    this.fieldLabelTextStyle,
+    this.fieldHintTextStyle,
     this.legalTextStyle,
     this.legalLinkTextStyle,
     this.documentTitleTextStyle,
@@ -30,10 +29,9 @@ class PhoneAuthThemeExtension extends ThemeExtension<PhoneAuthThemeExtension> {
   final TextStyle? headingTextStyle;
   final TextStyle? supportingTextStyle;
   final TextStyle? actionTextStyle;
-  final TextStyle? leadingValueTextStyle;
-  final TextStyle? inputLabelTextStyle;
-  final TextStyle? inputTextStyle;
-  final TextStyle? inputHintTextStyle;
+  final TextStyle? valueTextStyle;
+  final TextStyle? fieldLabelTextStyle;
+  final TextStyle? fieldHintTextStyle;
   final TextStyle? legalTextStyle;
   final TextStyle? legalLinkTextStyle;
   final TextStyle? documentTitleTextStyle;
@@ -53,10 +51,9 @@ class PhoneAuthThemeExtension extends ThemeExtension<PhoneAuthThemeExtension> {
     TextStyle? headingTextStyle,
     TextStyle? supportingTextStyle,
     TextStyle? actionTextStyle,
-    TextStyle? leadingValueTextStyle,
-    TextStyle? inputLabelTextStyle,
-    TextStyle? inputTextStyle,
-    TextStyle? inputHintTextStyle,
+    TextStyle? valueTextStyle,
+    TextStyle? fieldLabelTextStyle,
+    TextStyle? fieldHintTextStyle,
     TextStyle? legalTextStyle,
     TextStyle? legalLinkTextStyle,
     TextStyle? documentTitleTextStyle,
@@ -75,11 +72,9 @@ class PhoneAuthThemeExtension extends ThemeExtension<PhoneAuthThemeExtension> {
       headingTextStyle: headingTextStyle ?? this.headingTextStyle,
       supportingTextStyle: supportingTextStyle ?? this.supportingTextStyle,
       actionTextStyle: actionTextStyle ?? this.actionTextStyle,
-      leadingValueTextStyle:
-          leadingValueTextStyle ?? this.leadingValueTextStyle,
-      inputLabelTextStyle: inputLabelTextStyle ?? this.inputLabelTextStyle,
-      inputTextStyle: inputTextStyle ?? this.inputTextStyle,
-      inputHintTextStyle: inputHintTextStyle ?? this.inputHintTextStyle,
+      valueTextStyle: valueTextStyle ?? this.valueTextStyle,
+      fieldLabelTextStyle: fieldLabelTextStyle ?? this.fieldLabelTextStyle,
+      fieldHintTextStyle: fieldHintTextStyle ?? this.fieldHintTextStyle,
       legalTextStyle: legalTextStyle ?? this.legalTextStyle,
       legalLinkTextStyle: legalLinkTextStyle ?? this.legalLinkTextStyle,
       documentTitleTextStyle:
@@ -116,16 +111,17 @@ class PhoneAuthThemeExtension extends ThemeExtension<PhoneAuthThemeExtension> {
           TextStyle.lerp(supportingTextStyle, other.supportingTextStyle, t),
       actionTextStyle:
           TextStyle.lerp(actionTextStyle, other.actionTextStyle, t),
-      leadingValueTextStyle: TextStyle.lerp(
-        leadingValueTextStyle,
-        other.leadingValueTextStyle,
+      valueTextStyle: TextStyle.lerp(valueTextStyle, other.valueTextStyle, t),
+      fieldLabelTextStyle: TextStyle.lerp(
+        fieldLabelTextStyle,
+        other.fieldLabelTextStyle,
         t,
       ),
-      inputLabelTextStyle:
-          TextStyle.lerp(inputLabelTextStyle, other.inputLabelTextStyle, t),
-      inputTextStyle: TextStyle.lerp(inputTextStyle, other.inputTextStyle, t),
-      inputHintTextStyle:
-          TextStyle.lerp(inputHintTextStyle, other.inputHintTextStyle, t),
+      fieldHintTextStyle: TextStyle.lerp(
+        fieldHintTextStyle,
+        other.fieldHintTextStyle,
+        t,
+      ),
       legalTextStyle: TextStyle.lerp(legalTextStyle, other.legalTextStyle, t),
       legalLinkTextStyle:
           TextStyle.lerp(legalLinkTextStyle, other.legalLinkTextStyle, t),

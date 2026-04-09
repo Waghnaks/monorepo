@@ -10,6 +10,8 @@ import 'package:auth_phone/src/foundation/copy/phone_auth_copy_defaults.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PhoneAuthFlowController extends StateNotifier<PhoneAuthFlowState> {
+  /// Owns the async phone-auth lifecycle: send OTP, resend, verify, and reset
+  /// transient state when the flow returns to the phone page.
   PhoneAuthFlowController({
     required SendPhoneOtp sendPhoneOtp,
     required VerifyPhoneOtp verifyPhoneOtp,
@@ -69,21 +71,18 @@ class PhoneAuthFlowController extends StateNotifier<PhoneAuthFlowState> {
 
       state = state.copyWith(
         phoneAuthSession: session,
-        currentStep: PhoneAuthFlowStep.otpCode,
         otpCode: '',
         otpInputResetKey: state.otpInputResetKey + 1,
       );
       return true;
     } catch (_) {
       state = state.copyWith(
-        phoneErrorMessage:
-            isResend || state.currentStep == PhoneAuthFlowStep.otpCode
-                ? state.phoneErrorMessage
-                : PhoneAuthCopyDefaults.sendOtpFailureMessage,
-        otpErrorMessage:
-            isResend || state.currentStep == PhoneAuthFlowStep.otpCode
-                ? PhoneAuthCopyDefaults.resendOtpFailureMessage
-                : state.otpErrorMessage,
+        phoneErrorMessage: isResend
+            ? state.phoneErrorMessage
+            : PhoneAuthCopyDefaults.sendOtpFailureMessage,
+        otpErrorMessage: isResend
+            ? PhoneAuthCopyDefaults.resendOtpFailureMessage
+            : state.otpErrorMessage,
       );
       return false;
     } finally {
@@ -150,13 +149,16 @@ class PhoneAuthFlowController extends StateNotifier<PhoneAuthFlowState> {
   void goBackToPhoneStep() {
     _resendTimer?.cancel();
     state = state.copyWith(
-      currentStep: PhoneAuthFlowStep.phoneNumber,
       otpCode: '',
       otpErrorMessage: null,
       successMessage: null,
       otpInputResetKey: state.otpInputResetKey + 1,
       resendSecondsRemaining: 0,
     );
+  }
+
+  void stopResendTimer() {
+    _resendTimer?.cancel();
   }
 
   void _startResendTimer() {

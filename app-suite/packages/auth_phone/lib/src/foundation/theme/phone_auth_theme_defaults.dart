@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 abstract final class PhoneAuthThemeDefaults {
-  static const Color primaryColor = Color(0xFFE4005E);
   static const Color surfaceMutedColor = Color(0xFFF5F7FA);
   static const Color outlineColor = Color(0xFFE4E7EC);
   static const Color mutedForegroundColor = Color(0xFF667085);
@@ -44,28 +43,21 @@ abstract final class PhoneAuthThemeDefaults {
         letterSpacing: 0.08,
       );
 
-  static TextStyle leadingValueTextStyle(Color color) => TextStyle(
-        fontSize: 13,
-        fontWeight: FontWeight.w800,
-        color: color,
-        letterSpacing: 0.1,
-      );
-
-  static TextStyle inputLabelTextStyle(Color color) => TextStyle(
+  static TextStyle fieldLabelTextStyle(Color color) => TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w600,
         color: color,
         letterSpacing: 0.08,
       );
 
-  static TextStyle inputTextStyle(Color color) => TextStyle(
-        fontSize: 14,
+  static TextStyle valueTextStyle(Color color) => TextStyle(
+        fontSize: 16,
         fontWeight: FontWeight.w600,
         color: color,
         letterSpacing: 0.3,
       );
 
-  static TextStyle inputHintTextStyle(Color color) => TextStyle(
+  static TextStyle fieldHintTextStyle(Color color) => TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w400,
         color: color,

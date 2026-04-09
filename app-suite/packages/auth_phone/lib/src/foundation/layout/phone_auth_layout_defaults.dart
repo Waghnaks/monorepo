@@ -5,13 +5,11 @@ abstract final class PhoneAuthLayoutDefaults {
   static const double formMaxWidth = 380;
   static const double screenHorizontalPadding = 24;
   static const double screenTopPadding = 50;
-  static const double screenBottomPadding = 24;
+  static const double screenBottomPadding = 14;
   static const double sectionSpacing = 20;
   static const double buttonBorderRadius = 20;
   static const double buttonMinHeight = 52;
   static const double legalNoticeLineSpacing = 2;
   static const double legalNoticeTopSpacing = 20;
   static const double legalNoticeMaxWidth = 252;
-  static const double phoneEntryBottomSpacing = 20;
-  static const double phoneEntryMinHeight = 460;
 }

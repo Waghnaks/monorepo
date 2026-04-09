@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -25,10 +24,9 @@ class PrimaryButton extends StatelessWidget {
   final double minHeight;
   final bool expand;
 
-  /// A button is effectively disabled when [isDisabled] is true
-  /// OR when no [onPressed] callback is provided.
-  bool get _isEffectivelyDisabled =>
-      isDisabled || isLoading || onPressed == null;
+  bool get _usesDisabledStyle => isDisabled || isLoading || onPressed == null;
+
+  bool get _blocksInteraction => isDisabled || isLoading || onPressed == null;
 
   @override
   Widget build(BuildContext context) {
@@ -39,50 +37,51 @@ class PrimaryButton extends StatelessWidget {
     final resolvedForegroundColor =
         foregroundColor ?? theme.colorScheme.onPrimary;
 
-    // Industry standard: disabled state uses 38% opacity on color (Material 3 spec)
     final disabledBackgroundColor =
         resolvedBackgroundColor.withValues(alpha: 0.38);
     final disabledForegroundColor =
         resolvedForegroundColor.withValues(alpha: 0.38);
+    final effectiveBackgroundColor =
+        _usesDisabledStyle ? disabledBackgroundColor : resolvedBackgroundColor;
+    final effectiveForegroundColor =
+        _usesDisabledStyle ? disabledForegroundColor : resolvedForegroundColor;
 
-    final button = SizedBox(
-      height: minHeight,
-      child: ElevatedButton(
-        // Pass null to onPressed to let Flutter handle the disabled state natively
-        onPressed: _isEffectivelyDisabled ? null : onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: resolvedBackgroundColor,
-          foregroundColor: resolvedForegroundColor,
-          disabledBackgroundColor: disabledBackgroundColor,
-          disabledForegroundColor: disabledForegroundColor,
-          elevation: 0,
-          // Disabled buttons should have no shadow
-          shadowColor: _isEffectivelyDisabled ? Colors.transparent : null,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
-          ),
-          textStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1.1,
-          ),
-        ),
-        child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 180),
-          child: isLoading
-              ? SizedBox(
-                  key: const ValueKey('loading'),
-                  height: 18,
-                  width: 18,
-                  child: CupertinoActivityIndicator(
-                    color: resolvedForegroundColor,
-                    radius: 9,
+    final buttonChild = DefaultTextStyle(
+      style: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 1.1,
+        color: effectiveForegroundColor,
+      ),
+      child: Center(
+        child: isLoading
+            ? SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.4,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    effectiveForegroundColor,
                   ),
-                )
-              : Text(
-                  title.toUpperCase(),
-                  key: const ValueKey('title'),
                 ),
+              )
+            : Text(title.toUpperCase()),
+      ),
+    );
+
+    final button = Semantics(
+      button: true,
+      enabled: !_blocksInteraction,
+      child: Material(
+        color: effectiveBackgroundColor,
+        borderRadius: BorderRadius.circular(borderRadius),
+        child: InkWell(
+          onTap: _blocksInteraction ? null : onPressed,
+          borderRadius: BorderRadius.circular(borderRadius),
+          child: SizedBox(
+            height: minHeight,
+            child: buttonChild,
+          ),
         ),
       ),
     );

@@ -9,24 +9,6 @@ import '../../domain/repositories/phone_auth_repository.dart';
 import '../../domain/usecases/send_phone_otp.dart';
 import '../../domain/usecases/verify_phone_otp.dart';
 
-PhoneAuthDataSource createPhoneAuthDataSource({
-  PhoneAuthApiConfig apiConfig = const PhoneAuthApiConfig(),
-}) {
-  return PhoneAuthDataSource(apiConfig: apiConfig);
-}
-
-PhoneAuthRepository createPhoneAuthRepository() {
-  return PhoneAuthRepositoryImpl(createPhoneAuthDataSource());
-}
-
-SendPhoneOtp createSendPhoneOtp() {
-  return SendPhoneOtp(createPhoneAuthRepository());
-}
-
-VerifyPhoneOtp createVerifyPhoneOtp() {
-  return VerifyPhoneOtp(createPhoneAuthRepository());
-}
-
 final phoneAuthResendIntervalSecondsProvider = Provider<int>((ref) {
   return 30;
 });
@@ -35,8 +17,13 @@ final phoneAuthApiConfigProvider = Provider<PhoneAuthApiConfig>((ref) {
   return const PhoneAuthApiConfig();
 });
 
+final phoneAuthPhoneEntryTransitioningProvider =
+    StateProvider.autoDispose<bool>((ref) {
+  return false;
+});
+
 final phoneAuthDataSourceProvider = Provider<PhoneAuthDataSource>((ref) {
-  return createPhoneAuthDataSource(
+  return PhoneAuthDataSource(
     apiConfig: ref.watch(phoneAuthApiConfigProvider),
   );
 });

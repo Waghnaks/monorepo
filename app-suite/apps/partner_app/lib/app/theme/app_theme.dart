@@ -38,8 +38,7 @@ abstract final class AppTheme {
       ),
       extensions: <ThemeExtension<dynamic>>[
         PhoneAuthThemeExtension(
-          // Used by PhoneEntryScreen for the large app name shown at the
-          // top of the branded phone auth entry experience.
+          // Big brand title at the top of the phone page.
           brandTextStyle: const TextStyle(
             fontSize: 48,
             fontWeight: FontWeight.w900,
@@ -47,30 +46,28 @@ abstract final class AppTheme {
             letterSpacing: -1.15,
             height: 0.98,
           ),
-          // Used by PhoneEntryScreen directly under the app name as the
-          // supporting brand tag line.
+          // Smaller line under the app name.
           tagLineTextStyle: const TextStyle(
             fontSize: 23,
             fontWeight: FontWeight.w500,
             height: 1.35,
             color: AppColors.textNeutral,
           ),
-          // Used by PhoneEntryScreen and OtpVerificationScreen for primary
-          // screen titles such as "Enter your mobile number" and "Enter the OTP".
+          // Main page titles like "Enter your mobile number" and OTP heading.
           headingTextStyle: TextStyle(
             fontSize: 27,
             fontWeight: FontWeight.w800,
             letterSpacing: -0.45,
             color: colorScheme.onSurface,
           ),
+          // Normal supporting text under titles and helper copy on auth pages.
           supportingTextStyle: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
             height: 1.45,
             color: colorScheme.onSurface.withValues(alpha: 0.70),
           ),
-          // Used by OtpVerificationScreen for the resend SMS action and
-          // future inline text actions that should feel tappable but subtle.
+          // Small tappable text like "Resend SMS".
           actionTextStyle: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w600,
@@ -78,75 +75,64 @@ abstract final class AppTheme {
             letterSpacing: 0.08,
             color: AppColors.textSecondary,
           ),
-          // Used by PhoneNumberInputField for the dial code and future leading
-          // inline values inside form inputs.
-          leadingValueTextStyle: const TextStyle(
-            fontSize: 13,
+          // Used by both the ISD code and the typed phone number,
+          // so the full input feels like one single value.
+          valueTextStyle: const TextStyle(
+            fontSize: 16,
             fontWeight: FontWeight.w800,
-            letterSpacing: 0.1,
-            color: AppColors.textStrong,
+            letterSpacing: 0.3,
+            color: AppColors.textPrimary,
           ),
-          // Used by PhoneNumberInputField labels for reusable form sections.
-          inputLabelTextStyle: const TextStyle(
+          // Small label above inputs when a field label is shown.
+          fieldLabelTextStyle: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
             letterSpacing: 0.08,
             color: AppColors.textSecondary,
           ),
-          // Used by PhoneNumberInputField and future shared inputs for entered values.
-          inputTextStyle: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.3,
-            color: AppColors.textStrong,
-          ),
-          // Used by PhoneNumberInputField and search-style controls for placeholder text.
-          inputHintTextStyle: const TextStyle(
+          // Placeholder text inside fields and search inputs.
+          fieldHintTextStyle: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w400,
             color: AppColors.textMuted,
           ),
-          // Used by PhoneAuthLegalNotice for the smaller acknowledgement
-          // sentence above the Terms of Use and Privacy Policy links.
+          // Small legal/helper line above the links.
           legalTextStyle: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w500,
             height: 1.40,
             color: AppColors.textMuted,
           ),
-          // Used by PhoneAuthLegalNotice for the clickable legal links on
-          // the second line below the acknowledgement copy.
+          // Clickable legal links like Terms of Use and Privacy Policy.
           legalLinkTextStyle: const TextStyle(
-            fontSize: 14,
+            fontSize: 12,
             fontWeight: FontWeight.w700,
             height: 1.45,
-            color: AppColors.textStrong,
+            color: AppColors.textPrimary,
             decoration: TextDecoration.underline,
-            decorationColor: AppColors.textStrong,
+            decorationColor: AppColors.textPrimary,
           ),
-          // Used by PhoneAuthDocumentScreen and OtpVerificationScreen app-bar
-          // titles when a compact top title is needed.
+          // App bar title on document pages and similar compact headers.
           documentTitleTextStyle: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w700,
             color: AppColors.onSurface,
             letterSpacing: -0.3,
           ),
-          // Used by OtpVerificationScreen currently, and reusable anywhere a
-          // stronger accent-colored title is needed.
+          // Strong colored title, currently used on the OTP page app bar.
           accentTitleTextStyle: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w800,
             color: AppColors.primary,
             letterSpacing: -0.35,
           ),
-          surfaceMutedColor: AppColors.surfaceMuted,
+          surfaceMutedColor: AppColors.surfaceSubtle,
           outlineColor: AppColors.borderSubtle,
           mutedForegroundColor: AppColors.textSecondary,
           dangerColor: AppColors.error,
           documentViewerBackgroundColor: AppColors.surface,
           documentBackgroundColor: AppColors.surface,
-          documentLoaderColor: AppColors.loadingIndicator,
+          documentLoaderColor: AppColors.progress,
         ),
       ],
       elevatedButtonTheme: ElevatedButtonThemeData(

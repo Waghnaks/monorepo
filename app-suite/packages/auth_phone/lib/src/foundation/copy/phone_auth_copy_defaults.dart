@@ -8,9 +8,6 @@ abstract final class PhoneAuthCopyDefaults {
   static const String otpMessage = 'We sent a 6-digit code to';
   static const String phoneFieldHintText = 'Enter your mobile number';
   static const String sendOtpButtonTitle = 'Proceed';
-  static const String sendingOtpButtonTitle = 'Sending...';
-  static const String verifyOtpButtonTitle = 'Verify OTP';
-  static const String verifyingOtpButtonTitle = 'Verifying...';
   static const String resendLabel = 'Resend SMS';
   static const String countryPickerTitle = 'Select country';
   static const String countryPickerSearchHint = 'Country name or dial code';

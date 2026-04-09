@@ -6,7 +6,7 @@ import 'package:auth_phone/src/foundation/copy/phone_auth_copy_defaults.dart';
 import 'package:auth_phone/src/foundation/layout/phone_auth_layout_defaults.dart';
 import 'package:auth_phone/src/presentation/controllers/phone_number_input_controller.dart';
 import 'package:auth_phone/src/presentation/models/phone_auth_view_config.dart';
-import 'package:auth_phone/src/presentation/screens/phone_auth_flow_screen.dart';
+import 'package:auth_phone/src/presentation/navigation/phone_auth_flow_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phone_numbers_parser/phone_numbers_parser.dart';
@@ -63,49 +63,24 @@ class _PhoneAuthState extends State<PhoneAuth> {
           (ref) => widget.apiConfig,
         ),
       ],
-      child: Builder(
-        builder: (context) {
-          final theme = Theme.of(context);
-
-          return Scaffold(
-            backgroundColor: theme.scaffoldBackgroundColor,
-            body: SafeArea(
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: PhoneAuthLayoutDefaults.contentMaxWidth,
-                  ),
-                  child: PhoneAuthFlowScreen(
-                    controller: _controller,
-                    config: PhoneAuthViewConfig(
-                      appName: widget.appName,
-                      tagLine: widget.tagLine,
-                      title: PhoneAuthCopyDefaults.phoneTitle,
-                      subtitle: PhoneAuthCopyDefaults.phoneSubtitle,
-                      otpTitle: PhoneAuthCopyDefaults.otpTitle,
-                      initialCountry: widget.initialCountry,
-                      hintText: PhoneAuthCopyDefaults.phoneFieldHintText,
-                      themeColor: widget.themeColor,
-                      actionButtonTitle:
-                          PhoneAuthCopyDefaults.sendOtpButtonTitle,
-                      verifyButtonTitle:
-                          PhoneAuthCopyDefaults.verifyOtpButtonTitle,
-                      legalConfig: widget.legalConfig,
-                      onVerificationSuccess: widget.onVerificationSuccess,
-                      actionButtonBorderRadius:
-                          PhoneAuthLayoutDefaults.buttonBorderRadius,
-                      actionButtonSpacing:
-                          PhoneAuthLayoutDefaults.sectionSpacing,
-                      actionButtonMinHeight:
-                          PhoneAuthLayoutDefaults.buttonMinHeight,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
+      child: PhoneAuthFlowNavigator(
+        controller: _controller,
+        config: PhoneAuthViewConfig(
+          appName: widget.appName,
+          tagLine: widget.tagLine,
+          title: PhoneAuthCopyDefaults.phoneTitle,
+          subtitle: PhoneAuthCopyDefaults.phoneSubtitle,
+          otpTitle: PhoneAuthCopyDefaults.otpTitle,
+          initialCountry: widget.initialCountry,
+          hintText: PhoneAuthCopyDefaults.phoneFieldHintText,
+          themeColor: widget.themeColor,
+          actionButtonTitle: PhoneAuthCopyDefaults.sendOtpButtonTitle,
+          legalConfig: widget.legalConfig,
+          onVerificationSuccess: widget.onVerificationSuccess,
+          actionButtonBorderRadius: PhoneAuthLayoutDefaults.buttonBorderRadius,
+          actionButtonSpacing: PhoneAuthLayoutDefaults.sectionSpacing,
+          actionButtonMinHeight: PhoneAuthLayoutDefaults.buttonMinHeight,
+        ),
       ),
     );
   }

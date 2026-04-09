@@ -4,7 +4,7 @@ import 'package:auth_phone/src/presentation/models/otp_verification_screen_data.
 import 'package:auth_phone/src/presentation/theme/phone_auth_resolved_theme.dart';
 import 'package:auth_phone/src/presentation/widgets/otp_code_input_field.dart';
 import 'package:auth_phone/src/presentation/widgets/phone_auth_feedback_banner.dart';
-import 'package:design_system/design_system.dart';
+import 'package:auth_phone/src/presentation/widgets/phone_auth_page_body.dart';
 import 'package:flutter/material.dart';
 
 class OtpVerificationScreen extends StatelessWidget {
@@ -35,24 +35,33 @@ class OtpVerificationScreen extends StatelessWidget {
         resolvedTheme.accentColor.withValues(alpha: 0.14);
     final phoneChipTextColor = Theme.of(context).colorScheme.onSurface;
 
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        leading: BackButton(
-          onPressed: data.isVerifyingOtp ? null : onBackPressed,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop && !data.isVerifyingOtp) {
+          onBackPressed();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        appBar: AppBar(
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          leading: BackButton(
+            onPressed: data.isVerifyingOtp ? null : onBackPressed,
+          ),
+          title: data.appBarTitle != null && data.appBarTitle!.trim().isNotEmpty
+              ? Text(
+                  data.appBarTitle!,
+                  style: resolvedTheme.accentTitleTextStyle,
+                )
+              : null,
+          centerTitle: true,
         ),
-        title: Text(
-          data.appBarTitle!,
-          style: resolvedTheme.accentTitleTextStyle,
-        ),
-        centerTitle: true,
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (data.appBarTitle != null && data.appBarTitle!.trim().isNotEmpty)
-            Padding(
+        body: SafeArea(
+          top: false,
+          child: PhoneAuthPageBody(
+            child: Padding(
               padding: const EdgeInsets.fromLTRB(
                 PhoneAuthLayoutDefaults.screenHorizontalPadding,
                 PhoneAuthLayoutDefaults.screenTopPadding,
@@ -110,7 +119,12 @@ class OtpVerificationScreen extends StatelessWidget {
                         themeColor: resolvedTheme.accentColor,
                         hasError: data.otpErrorMessage != null,
                         onChanged: onOtpChanged,
-                        onCompleted: onOtpChanged,
+                        onCompleted: (code) {
+                          onOtpChanged(code);
+                          if (!data.isVerifyingOtp) {
+                            onVerifyPressed();
+                          }
+                        },
                       ),
                     ),
                   ),
@@ -122,6 +136,8 @@ class OtpVerificationScreen extends StatelessWidget {
                       child: PhoneAuthFeedbackBanner(
                         color: data.errorColor,
                         message: data.otpErrorMessage,
+                        presentation: PhoneAuthFeedbackPresentation.inlineText,
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
@@ -136,6 +152,21 @@ class OtpVerificationScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  if (data.isVerifyingOtp) ...[
+                    const SizedBox(height: 18),
+                    Center(
+                      child: SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.4,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            resolvedTheme.accentColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 22),
                   Center(
                     child: data.resendSecondsRemaining > 0
@@ -167,30 +198,11 @@ class OtpVerificationScreen extends StatelessWidget {
                             ),
                           ),
                   ),
-                  if (data.showActionButton) ...[
-                    SizedBox(height: data.actionButtonSpacing),
-                    Center(
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          maxWidth: PhoneAuthLayoutDefaults.formMaxWidth,
-                        ),
-                        child: PrimaryButton(
-                          isDisabled: data.isVerifyButtonDisabled,
-                          isLoading: data.isActionButtonLoading,
-                          title: data.verifyButtonTitle,
-                          onPressed: onVerifyPressed,
-                          backgroundColor: data.actionButtonBackgroundColor,
-                          foregroundColor: data.actionButtonForegroundColor,
-                          borderRadius: data.actionButtonBorderRadius,
-                          minHeight: data.actionButtonMinHeight,
-                        ),
-                      ),
-                    ),
-                  ],
                 ],
               ),
             ),
-        ],
+          ),
+        ),
       ),
     );
   }

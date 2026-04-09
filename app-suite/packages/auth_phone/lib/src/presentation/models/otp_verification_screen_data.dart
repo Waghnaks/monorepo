@@ -15,15 +15,6 @@ class OtpVerificationScreenData {
     required this.resendSecondsRemaining,
     required this.isResendingOtp,
     required this.isVerifyingOtp,
-    required this.isVerifyButtonDisabled,
-    required this.showActionButton,
-    required this.verifyButtonTitle,
-    required this.actionButtonBackgroundColor,
-    required this.actionButtonForegroundColor,
-    required this.actionButtonBorderRadius,
-    required this.actionButtonSpacing,
-    required this.actionButtonMinHeight,
-    required this.isActionButtonLoading,
   });
 
   final String? appBarTitle;
@@ -38,13 +29,4 @@ class OtpVerificationScreenData {
   final int resendSecondsRemaining;
   final bool isResendingOtp;
   final bool isVerifyingOtp;
-  final bool isVerifyButtonDisabled;
-  final bool showActionButton;
-  final String verifyButtonTitle;
-  final Color? actionButtonBackgroundColor;
-  final Color? actionButtonForegroundColor;
-  final double actionButtonBorderRadius;
-  final double actionButtonSpacing;
-  final double actionButtonMinHeight;
-  final bool isActionButtonLoading;
 }

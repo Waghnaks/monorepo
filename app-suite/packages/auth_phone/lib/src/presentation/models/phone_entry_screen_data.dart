@@ -17,7 +17,6 @@ class PhoneEntryScreenData {
     required this.phoneErrorMessage,
     required this.errorColor,
     required this.actionButtonTitle,
-    required this.showActionButton,
     required this.actionButtonBackgroundColor,
     required this.actionButtonForegroundColor,
     required this.actionButtonBorderRadius,
@@ -25,6 +24,7 @@ class PhoneEntryScreenData {
     required this.actionButtonMinHeight,
     required this.isActionButtonLoading,
     required this.isActionButtonDisabled,
+    required this.isInteractionLocked,
     this.legalConfig,
   });
 
@@ -40,7 +40,6 @@ class PhoneEntryScreenData {
   final String? phoneErrorMessage;
   final Color errorColor;
   final String actionButtonTitle;
-  final bool showActionButton;
   final Color? actionButtonBackgroundColor;
   final Color? actionButtonForegroundColor;
   final double actionButtonBorderRadius;
@@ -48,5 +47,6 @@ class PhoneEntryScreenData {
   final double actionButtonMinHeight;
   final bool isActionButtonLoading;
   final bool isActionButtonDisabled;
+  final bool isInteractionLocked;
   final PhoneAuthLegalConfig? legalConfig;
 }

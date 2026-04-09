@@ -1,9 +1,12 @@
+import 'package:auth_phone/src/data/services/phone_number_hint_service.dart';
 import 'package:auth_phone/src/domain/models/phone_country.dart';
 import 'package:auth_phone/src/domain/models/phone_number_result.dart';
 import 'package:auth_phone/src/domain/validation/phone_number_validator.dart';
 import 'package:auth_phone/src/foundation/copy/phone_auth_copy_defaults.dart';
 import 'package:auth_phone/src/presentation/controllers/phone_number_input_controller.dart';
+import 'package:auth_phone/src/presentation/models/phone_number_hint_value.dart';
 import 'package:auth_phone/src/presentation/theme/phone_auth_resolved_theme.dart';
+import 'package:auth_phone/src/presentation/utils/phone_number_hint_parser.dart';
 import 'package:auth_phone/src/presentation/widgets/phone_country_flag.dart';
 import 'package:auth_phone/src/presentation/widgets/phone_country_picker_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -47,18 +50,22 @@ class _PhoneNumberInputFieldState extends State<PhoneNumberInputField> {
   late PhoneCountry _selectedCountry;
   PhoneNumberResult? _lastResult;
   late PhoneNumberInputController _publicController;
+  bool _hasRequestedPhoneNumberHint = false;
+  bool _isRequestingPhoneNumberHint = false;
 
   @override
   void initState() {
     super.initState();
     _publicController = widget.controller;
     _publicController.bindClearHandler(_clearField);
+    _publicController.bindUnfocusHandler(_unfocusField);
     final initialValue = _publicController.value;
     _selectedCountry = initialValue != null
         ? phoneCountryByIso(initialValue.isoCode)
         : phoneCountryByIso(widget.initialCountry);
     _lastResult = initialValue;
     _textController.text = initialValue?.nationalNumber ?? '';
+    _hasRequestedPhoneNumberHint = _textController.text.trim().isNotEmpty;
     _textController.addListener(_onTextChanged);
   }
 
@@ -113,8 +120,73 @@ class _PhoneNumberInputFieldState extends State<PhoneNumberInputField> {
   }
 
   void _clearField() {
+    if (!widget.enabled) {
+      return;
+    }
+
     _textController.clear();
     setState(() {});
+  }
+
+  void _unfocusField() {
+    _focusNode.unfocus();
+  }
+
+  Future<void> _requestPhoneNumberHintOnFirstTap() async {
+    if (_hasRequestedPhoneNumberHint ||
+        _isRequestingPhoneNumberHint ||
+        !widget.enabled ||
+        _textController.text.trim().isNotEmpty) {
+      return;
+    }
+
+    _hasRequestedPhoneNumberHint = true;
+    _isRequestingPhoneNumberHint = true;
+
+    _focusNode.unfocus();
+    await SystemChannels.textInput.invokeMethod<void>('TextInput.hide');
+
+    final hintedPhoneNumber =
+        await PhoneNumberHintService.requestPhoneNumberHint();
+
+    if (!mounted) {
+      return;
+    }
+
+    _isRequestingPhoneNumberHint = false;
+
+    if (hintedPhoneNumber == null) {
+      _focusNode.requestFocus();
+      return;
+    }
+
+    _applyPhoneNumberHint(hintedPhoneNumber);
+  }
+
+  void _applyPhoneNumberHint(String hintedPhoneNumber) {
+    final hintValue = resolvePhoneNumberHint(
+      hintedPhoneNumber,
+      fallbackCountry: _selectedCountry,
+    );
+
+    if (hintValue == null) {
+      _focusNode.requestFocus();
+      return;
+    }
+
+    _updateFieldFromHint(hintValue);
+  }
+
+  void _updateFieldFromHint(PhoneNumberHintValue hintValue) {
+    setState(() {
+      _selectedCountry = hintValue.country;
+      _textController.value = TextEditingValue(
+        text: hintValue.nationalNumber,
+        selection: TextSelection.collapsed(
+          offset: hintValue.nationalNumber.length,
+        ),
+      );
+    });
   }
 
   void _openCountryPicker() {
@@ -125,7 +197,7 @@ class _PhoneNumberInputFieldState extends State<PhoneNumberInputField> {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -167,7 +239,7 @@ class _PhoneNumberInputFieldState extends State<PhoneNumberInputField> {
           if (widget.label != null) ...[
             Text(
               widget.label!,
-              style: resolvedTheme.inputLabelTextStyle,
+              style: resolvedTheme.fieldLabelTextStyle,
             ),
             const SizedBox(height: 6),
           ],
@@ -210,7 +282,7 @@ class _PhoneNumberInputFieldState extends State<PhoneNumberInputField> {
                             const SizedBox(width: 6),
                             Text(
                               _selectedCountry.dialCode,
-                              style: resolvedTheme.leadingValueTextStyle,
+                              style: resolvedTheme.valueTextStyle,
                             ),
                             if (widget.showCountryPicker) ...[
                               const SizedBox(width: 3),
@@ -231,37 +303,55 @@ class _PhoneNumberInputFieldState extends State<PhoneNumberInputField> {
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: TextField(
-                        controller: _textController,
-                        focusNode: _focusNode,
-                        enabled: widget.enabled,
-                        keyboardType: TextInputType.phone,
-                        textInputAction: TextInputAction.done,
-                        cursorColor: resolvedTheme.accentColor,
-                        cursorWidth: 1.6,
-                        cursorRadius: const Radius.circular(2),
-                        inputFormatters: [
-                          const _DigitsOnlyFormatter(),
-                          LengthLimitingTextInputFormatter(
-                            _selectedCountry.maxNationalNumberLength,
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: widget.enabled &&
+                                !_hasRequestedPhoneNumberHint &&
+                                _textController.text.trim().isEmpty
+                            ? _requestPhoneNumberHintOnFirstTap
+                            : null,
+                        child: AbsorbPointer(
+                          absorbing: !_hasRequestedPhoneNumberHint &&
+                              _textController.text.trim().isEmpty,
+                          child: TextField(
+                            controller: _textController,
+                            focusNode: _focusNode,
+                            enabled: widget.enabled,
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: false,
+                              signed: false,
+                            ),
+                            textInputAction: TextInputAction.done,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            onTapOutside: (_) => _unfocusField(),
+                            cursorColor: resolvedTheme.accentColor,
+                            cursorWidth: 1.6,
+                            cursorRadius: const Radius.circular(2),
+                            inputFormatters: [
+                              const _DigitsOnlyFormatter(),
+                              LengthLimitingTextInputFormatter(
+                                _selectedCountry.maxNationalNumberLength,
+                              ),
+                            ],
+                            onSubmitted: (_) {
+                              if (_lastResult != null) {
+                                widget.onSubmitted?.call(_lastResult!);
+                              }
+                            },
+                            style: resolvedTheme.valueTextStyle,
+                            decoration: InputDecoration(
+                              hintText: widget.hintText,
+                              hintStyle: resolvedTheme.fieldHintTextStyle,
+                              border: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              isDense: true,
+                              contentPadding:
+                                  const EdgeInsets.symmetric(vertical: 0),
+                            ),
                           ),
-                        ],
-                        onSubmitted: (_) {
-                          if (_lastResult != null) {
-                            widget.onSubmitted?.call(_lastResult!);
-                          }
-                        },
-                        style: resolvedTheme.inputTextStyle,
-                        decoration: InputDecoration(
-                          hintText: widget.hintText,
-                          hintStyle: resolvedTheme.inputHintTextStyle,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          isDense: true,
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 0),
                         ),
                       ),
                     ),
@@ -275,7 +365,7 @@ class _PhoneNumberInputFieldState extends State<PhoneNumberInputField> {
                             return const SizedBox(width: 14);
                           }
                           return GestureDetector(
-                            onTap: _clearField,
+                            onTap: widget.enabled ? _clearField : null,
                             child: Padding(
                               padding: const EdgeInsets.only(right: 14),
                               child: Container(

@@ -12,10 +12,9 @@ class PhoneAuthResolvedTheme {
     required this.headingTextStyle,
     required this.supportingTextStyle,
     required this.actionTextStyle,
-    required this.leadingValueTextStyle,
-    required this.inputLabelTextStyle,
-    required this.inputTextStyle,
-    required this.inputHintTextStyle,
+    required this.valueTextStyle,
+    required this.fieldLabelTextStyle,
+    required this.fieldHintTextStyle,
     required this.legalTextStyle,
     required this.legalLinkTextStyle,
     required this.documentTitleTextStyle,
@@ -36,10 +35,9 @@ class PhoneAuthResolvedTheme {
   final TextStyle headingTextStyle;
   final TextStyle supportingTextStyle;
   final TextStyle actionTextStyle;
-  final TextStyle leadingValueTextStyle;
-  final TextStyle inputLabelTextStyle;
-  final TextStyle inputTextStyle;
-  final TextStyle inputHintTextStyle;
+  final TextStyle valueTextStyle;
+  final TextStyle fieldLabelTextStyle;
+  final TextStyle fieldHintTextStyle;
   final TextStyle legalTextStyle;
   final TextStyle legalLinkTextStyle;
   final TextStyle documentTitleTextStyle;
@@ -96,15 +94,13 @@ class PhoneAuthResolvedTheme {
             authTheme?.mutedForegroundColor ??
                 colorScheme.onSurface.withValues(alpha: 0.72),
           ),
-      leadingValueTextStyle: authTheme?.leadingValueTextStyle ??
-          PhoneAuthThemeDefaults.leadingValueTextStyle(colorScheme.onSurface),
-      inputLabelTextStyle: authTheme?.inputLabelTextStyle ??
-          PhoneAuthThemeDefaults.inputLabelTextStyle(
+      valueTextStyle: authTheme?.valueTextStyle ??
+          PhoneAuthThemeDefaults.valueTextStyle(colorScheme.onSurface),
+      fieldLabelTextStyle: authTheme?.fieldLabelTextStyle ??
+          PhoneAuthThemeDefaults.fieldLabelTextStyle(
               resolvedMutedForegroundColor),
-      inputTextStyle: authTheme?.inputTextStyle ??
-          PhoneAuthThemeDefaults.inputTextStyle(colorScheme.onSurface),
-      inputHintTextStyle: authTheme?.inputHintTextStyle ??
-          PhoneAuthThemeDefaults.inputHintTextStyle(
+      fieldHintTextStyle: authTheme?.fieldHintTextStyle ??
+          PhoneAuthThemeDefaults.fieldHintTextStyle(
               resolvedMutedForegroundColor),
       legalTextStyle: authTheme?.legalTextStyle ??
           PhoneAuthThemeDefaults.legalTextStyle(

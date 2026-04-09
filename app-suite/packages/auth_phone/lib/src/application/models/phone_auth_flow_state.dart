@@ -5,15 +5,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'phone_auth_flow_state.freezed.dart';
 
-enum PhoneAuthFlowStep {
-  phoneNumber,
-  otpCode,
-}
-
 @freezed
 class PhoneAuthFlowState with _$PhoneAuthFlowState {
+  /// Holds the live phone input, OTP request state, and verification result
+  /// for the current auth session.
   const factory PhoneAuthFlowState({
-    @Default(PhoneAuthFlowStep.phoneNumber) PhoneAuthFlowStep currentStep,
     PhoneNumberResult? phoneNumberResult,
     PhoneAuthSession? phoneAuthSession,
     @Default(false) bool isSendingOtp,
@@ -50,7 +46,23 @@ class PhoneAuthFlowState with _$PhoneAuthFlowState {
   }
 
   String get phoneLabel {
+    final sessionPhoneNumber = phoneAuthSession?.phoneNumber;
     final result = phoneNumberResult;
+
+    if (sessionPhoneNumber != null && sessionPhoneNumber.isNotEmpty) {
+      final dialCode = result?.dialCode;
+      if (dialCode != null &&
+          dialCode.isNotEmpty &&
+          sessionPhoneNumber.startsWith(dialCode)) {
+        final nationalNumber = sessionPhoneNumber.substring(dialCode.length);
+        if (nationalNumber.isNotEmpty) {
+          return '$dialCode $nationalNumber';
+        }
+      }
+
+      return sessionPhoneNumber;
+    }
+
     if (result == null) {
       return '';
     }

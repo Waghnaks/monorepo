@@ -1,5 +1,4 @@
 import 'package:auth_phone/src/application/models/phone_auth_flow_state.dart';
-import 'package:auth_phone/src/foundation/copy/phone_auth_copy_defaults.dart';
 import 'package:auth_phone/src/presentation/models/otp_verification_screen_data.dart';
 import 'package:auth_phone/src/presentation/models/phone_auth_view_config.dart';
 import 'package:auth_phone/src/presentation/models/phone_entry_screen_data.dart';
@@ -11,6 +10,7 @@ abstract final class PhoneAuthFlowViewDataFactory {
     BuildContext context, {
     required PhoneAuthFlowState state,
     required PhoneAuthViewConfig config,
+    bool isTransitioningToOtp = false,
   }) {
     final resolvedTheme = PhoneAuthResolvedTheme.of(
       context,
@@ -24,15 +24,13 @@ abstract final class PhoneAuthFlowViewDataFactory {
       subtitle: config.subtitle,
       initialCountry: config.initialCountry,
       hintText: config.hintText,
-      enabled: !state.isSendingOtp && !state.isResendingOtp,
+      enabled:
+          !state.isSendingOtp && !state.isResendingOtp && !isTransitioningToOtp,
       showCountryPicker: true,
       themeColor: resolvedTheme.accentColor,
       phoneErrorMessage: state.phoneErrorMessage,
       errorColor: resolvedTheme.dangerColor,
-      actionButtonTitle: state.isSendingOtp
-          ? PhoneAuthCopyDefaults.sendingOtpButtonTitle
-          : config.actionButtonTitle,
-      showActionButton: true,
+      actionButtonTitle: config.actionButtonTitle,
       actionButtonBackgroundColor:
           config.themeColor != null ? resolvedTheme.accentColor : null,
       actionButtonForegroundColor:
@@ -40,10 +38,9 @@ abstract final class PhoneAuthFlowViewDataFactory {
       actionButtonBorderRadius: config.actionButtonBorderRadius,
       actionButtonSpacing: config.actionButtonSpacing,
       actionButtonMinHeight: config.actionButtonMinHeight,
-      isActionButtonLoading: state.isSendingOtp,
-      isActionButtonDisabled: !state.isPhoneNumberReady ||
-          state.isSendingOtp ||
-          state.isResendingOtp,
+      isActionButtonLoading: isTransitioningToOtp || state.isSendingOtp,
+      isActionButtonDisabled: !state.isPhoneNumberReady || isTransitioningToOtp,
+      isInteractionLocked: isTransitioningToOtp || state.isSendingOtp,
       legalConfig: config.legalConfig,
     );
   }
@@ -71,19 +68,6 @@ abstract final class PhoneAuthFlowViewDataFactory {
       resendSecondsRemaining: state.resendSecondsRemaining,
       isResendingOtp: state.isResendingOtp,
       isVerifyingOtp: state.isVerifyingOtp,
-      isVerifyButtonDisabled: !state.isOtpComplete || state.isVerifyingOtp,
-      showActionButton: true,
-      verifyButtonTitle: state.isVerifyingOtp
-          ? PhoneAuthCopyDefaults.verifyingOtpButtonTitle
-          : config.verifyButtonTitle,
-      actionButtonBackgroundColor:
-          config.themeColor != null ? resolvedTheme.accentColor : null,
-      actionButtonForegroundColor:
-          config.themeColor != null ? resolvedTheme.onAccentColor : null,
-      actionButtonBorderRadius: config.actionButtonBorderRadius,
-      actionButtonSpacing: config.actionButtonSpacing,
-      actionButtonMinHeight: config.actionButtonMinHeight,
-      isActionButtonLoading: state.isVerifyingOtp,
     );
   }
 }

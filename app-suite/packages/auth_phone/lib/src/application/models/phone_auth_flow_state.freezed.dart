@@ -16,7 +16,6 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$PhoneAuthFlowState {
-  PhoneAuthFlowStep get currentStep => throw _privateConstructorUsedError;
   PhoneNumberResult? get phoneNumberResult =>
       throw _privateConstructorUsedError;
   PhoneAuthSession? get phoneAuthSession => throw _privateConstructorUsedError;
@@ -44,8 +43,7 @@ abstract class $PhoneAuthFlowStateCopyWith<$Res> {
       _$PhoneAuthFlowStateCopyWithImpl<$Res, PhoneAuthFlowState>;
   @useResult
   $Res call(
-      {PhoneAuthFlowStep currentStep,
-      PhoneNumberResult? phoneNumberResult,
+      {PhoneNumberResult? phoneNumberResult,
       PhoneAuthSession? phoneAuthSession,
       bool isSendingOtp,
       bool isResendingOtp,
@@ -73,7 +71,6 @@ class _$PhoneAuthFlowStateCopyWithImpl<$Res, $Val extends PhoneAuthFlowState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? currentStep = null,
     Object? phoneNumberResult = freezed,
     Object? phoneAuthSession = freezed,
     Object? isSendingOtp = null,
@@ -87,10 +84,6 @@ class _$PhoneAuthFlowStateCopyWithImpl<$Res, $Val extends PhoneAuthFlowState>
     Object? resendSecondsRemaining = null,
   }) {
     return _then(_value.copyWith(
-      currentStep: null == currentStep
-          ? _value.currentStep
-          : currentStep // ignore: cast_nullable_to_non_nullable
-              as PhoneAuthFlowStep,
       phoneNumberResult: freezed == phoneNumberResult
           ? _value.phoneNumberResult
           : phoneNumberResult // ignore: cast_nullable_to_non_nullable
@@ -148,8 +141,7 @@ abstract class _$$PhoneAuthFlowStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {PhoneAuthFlowStep currentStep,
-      PhoneNumberResult? phoneNumberResult,
+      {PhoneNumberResult? phoneNumberResult,
       PhoneAuthSession? phoneAuthSession,
       bool isSendingOtp,
       bool isResendingOtp,
@@ -175,7 +167,6 @@ class __$$PhoneAuthFlowStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? currentStep = null,
     Object? phoneNumberResult = freezed,
     Object? phoneAuthSession = freezed,
     Object? isSendingOtp = null,
@@ -189,10 +180,6 @@ class __$$PhoneAuthFlowStateImplCopyWithImpl<$Res>
     Object? resendSecondsRemaining = null,
   }) {
     return _then(_$PhoneAuthFlowStateImpl(
-      currentStep: null == currentStep
-          ? _value.currentStep
-          : currentStep // ignore: cast_nullable_to_non_nullable
-              as PhoneAuthFlowStep,
       phoneNumberResult: freezed == phoneNumberResult
           ? _value.phoneNumberResult
           : phoneNumberResult // ignore: cast_nullable_to_non_nullable
@@ -245,8 +232,7 @@ class __$$PhoneAuthFlowStateImplCopyWithImpl<$Res>
 
 class _$PhoneAuthFlowStateImpl extends _PhoneAuthFlowState {
   const _$PhoneAuthFlowStateImpl(
-      {this.currentStep = PhoneAuthFlowStep.phoneNumber,
-      this.phoneNumberResult,
+      {this.phoneNumberResult,
       this.phoneAuthSession,
       this.isSendingOtp = false,
       this.isResendingOtp = false,
@@ -259,9 +245,6 @@ class _$PhoneAuthFlowStateImpl extends _PhoneAuthFlowState {
       this.resendSecondsRemaining = 0})
       : super._();
 
-  @override
-  @JsonKey()
-  final PhoneAuthFlowStep currentStep;
   @override
   final PhoneNumberResult? phoneNumberResult;
   @override
@@ -293,7 +276,7 @@ class _$PhoneAuthFlowStateImpl extends _PhoneAuthFlowState {
 
   @override
   String toString() {
-    return 'PhoneAuthFlowState(currentStep: $currentStep, phoneNumberResult: $phoneNumberResult, phoneAuthSession: $phoneAuthSession, isSendingOtp: $isSendingOtp, isResendingOtp: $isResendingOtp, isVerifyingOtp: $isVerifyingOtp, otpCode: $otpCode, phoneErrorMessage: $phoneErrorMessage, otpErrorMessage: $otpErrorMessage, successMessage: $successMessage, otpInputResetKey: $otpInputResetKey, resendSecondsRemaining: $resendSecondsRemaining)';
+    return 'PhoneAuthFlowState(phoneNumberResult: $phoneNumberResult, phoneAuthSession: $phoneAuthSession, isSendingOtp: $isSendingOtp, isResendingOtp: $isResendingOtp, isVerifyingOtp: $isVerifyingOtp, otpCode: $otpCode, phoneErrorMessage: $phoneErrorMessage, otpErrorMessage: $otpErrorMessage, successMessage: $successMessage, otpInputResetKey: $otpInputResetKey, resendSecondsRemaining: $resendSecondsRemaining)';
   }
 
   @override
@@ -301,8 +284,6 @@ class _$PhoneAuthFlowStateImpl extends _PhoneAuthFlowState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PhoneAuthFlowStateImpl &&
-            (identical(other.currentStep, currentStep) ||
-                other.currentStep == currentStep) &&
             (identical(other.phoneNumberResult, phoneNumberResult) ||
                 other.phoneNumberResult == phoneNumberResult) &&
             (identical(other.phoneAuthSession, phoneAuthSession) ||
@@ -329,7 +310,6 @@ class _$PhoneAuthFlowStateImpl extends _PhoneAuthFlowState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      currentStep,
       phoneNumberResult,
       phoneAuthSession,
       isSendingOtp,
@@ -354,8 +334,7 @@ class _$PhoneAuthFlowStateImpl extends _PhoneAuthFlowState {
 
 abstract class _PhoneAuthFlowState extends PhoneAuthFlowState {
   const factory _PhoneAuthFlowState(
-      {final PhoneAuthFlowStep currentStep,
-      final PhoneNumberResult? phoneNumberResult,
+      {final PhoneNumberResult? phoneNumberResult,
       final PhoneAuthSession? phoneAuthSession,
       final bool isSendingOtp,
       final bool isResendingOtp,
@@ -368,8 +347,6 @@ abstract class _PhoneAuthFlowState extends PhoneAuthFlowState {
       final int resendSecondsRemaining}) = _$PhoneAuthFlowStateImpl;
   const _PhoneAuthFlowState._() : super._();
 
-  @override
-  PhoneAuthFlowStep get currentStep;
   @override
   PhoneNumberResult? get phoneNumberResult;
   @override

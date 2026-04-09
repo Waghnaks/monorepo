@@ -14,7 +14,6 @@ class PhoneAuthViewConfig {
     required this.hintText,
     required this.themeColor,
     required this.actionButtonTitle,
-    required this.verifyButtonTitle,
     required this.legalConfig,
     required this.onVerificationSuccess,
     required this.actionButtonBorderRadius,
@@ -31,7 +30,6 @@ class PhoneAuthViewConfig {
   final String hintText;
   final Color? themeColor;
   final String actionButtonTitle;
-  final String verifyButtonTitle;
   final PhoneAuthLegalConfig? legalConfig;
   final ValueChanged<PhoneAuthSession>? onVerificationSuccess;
   final double actionButtonBorderRadius;

@@ -4,7 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 abstract final class PhoneAuthFlowActions {
-  static Future<void> sendOtp(
+  /// Keeps widget callbacks thin by routing send and verify actions through a
+  /// single facade for the Riverpod controller.
+  static Future<bool> sendOtp(
     WidgetRef ref, {
     bool isResend = false,
   }) {
