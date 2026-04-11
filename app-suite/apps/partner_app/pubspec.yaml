@@ -11,8 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  auth_phone:
-    path: ../../packages/auth_phone
+  phone_auth:
+    path: ../../packages/phone_auth
 
 dev_dependencies:
   flutter_test:

@@ -8,7 +8,7 @@ workspace:
   - apps/admin_app
   - apps/partner_app
   - apps/user_app
-  - packages/auth_phone
+  - packages/phone_auth
   - packages/core
   - packages/services
   - packages/design_system

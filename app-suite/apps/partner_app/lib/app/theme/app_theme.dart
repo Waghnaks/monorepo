@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:auth_phone/auth_phone.dart';
+import 'package:phone_auth/phone_auth.dart';
 
 import 'app_colors.dart';
 
@@ -66,6 +66,15 @@ abstract final class AppTheme {
             fontWeight: FontWeight.w500,
             height: 1.45,
             color: colorScheme.onSurface.withValues(alpha: 0.70),
+          ),
+          // Medium-emphasis body text.
+          // You see this on the prompt above the phone input on the new-user
+          // phone auth screen.
+          bodyEmphasisTextStyle: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            height: 1.45,
+            color: AppColors.textPrimary,
           ),
           // Small tappable text like "Resend SMS".
           actionTextStyle: const TextStyle(
