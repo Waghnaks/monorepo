@@ -34,11 +34,12 @@ class PhoneNumberInputScreen extends StatelessWidget {
       context,
       accentColor: data.themeColor,
     );
-    final keyboardInset =
-        data.userPhoneAuth ? MediaQuery.viewInsetsOf(context).bottom : 0.0;
+    final hasAppName = data.appName?.trim().isNotEmpty ?? false;
+    final keyboardInset = data.userPhoneAuth && hasAppName
+        ? MediaQuery.viewInsetsOf(context).bottom
+        : 0.0;
     final hasLegalNotice = data.legalConfig?.hasAnyLink ?? false;
-    final hasBrandedHeader = (data.appName?.trim().isNotEmpty ?? false) ||
-        (data.tagLine?.trim().isNotEmpty ?? false);
+    final hasBrandedHeader = hasAppName;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -58,32 +59,40 @@ class PhoneNumberInputScreen extends StatelessWidget {
             child: AbsorbPointer(
               absorbing: data.isInteractionLocked,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  PhoneAuthLayoutDefaults.screenHorizontalPadding,
-                  PhoneAuthLayoutDefaults.phoneInputscreenTopPadding,
-                  PhoneAuthLayoutDefaults.screenHorizontalPadding,
-                  PhoneAuthLayoutDefaults.screenBottomPadding,
-                ),
-                child: data.userPhoneAuth
-                    ? _ReturningUserPhoneNumberLayout(
-                        controller: controller,
-                        data: data,
-                        resolvedTheme: resolvedTheme,
-                        hasBrandedHeader: hasBrandedHeader,
-                        onChanged: onChanged,
-                        onSubmitted: onSubmitted,
-                        onSendOtpPressed: onSendOtpPressed,
-                      )
-                    : _NewUserPhoneNumberLayout(
-                        controller: controller,
-                        data: data,
-                        resolvedTheme: resolvedTheme,
-                        hasBrandedHeader: hasBrandedHeader,
-                        onChanged: onChanged,
-                        onSubmitted: onSubmitted,
-                        onSendOtpPressed: onSendOtpPressed,
-                      ),
-              ),
+                  padding: const EdgeInsets.fromLTRB(
+                    PhoneAuthLayoutDefaults.screenHorizontalPadding,
+                    PhoneAuthLayoutDefaults.phoneInputscreenTopPadding,
+                    PhoneAuthLayoutDefaults.screenHorizontalPadding,
+                    PhoneAuthLayoutDefaults.screenBottomPadding,
+                  ),
+                  child: data.userPhoneAuth
+                      ? hasAppName
+                          ? _ReturningUserPhoneNumberLayout(
+                              controller: controller,
+                              data: data,
+                              resolvedTheme: resolvedTheme,
+                              hasBrandedHeader: hasBrandedHeader,
+                              onChanged: onChanged,
+                              onSubmitted: onSubmitted,
+                              onSendOtpPressed: onSendOtpPressed,
+                            )
+                          : _CenteredFallbackPhoneNumberLayout(
+                              controller: controller,
+                              data: data,
+                              resolvedTheme: resolvedTheme,
+                              onChanged: onChanged,
+                              onSubmitted: onSubmitted,
+                              onSendOtpPressed: onSendOtpPressed,
+                            )
+                      : _NewUserPhoneNumberLayout(
+                          controller: controller,
+                          data: data,
+                          resolvedTheme: resolvedTheme,
+                          hasBrandedHeader: hasBrandedHeader,
+                          onChanged: onChanged,
+                          onSubmitted: onSubmitted,
+                          onSendOtpPressed: onSendOtpPressed,
+                        )),
             ),
           ),
         ),
@@ -108,6 +117,52 @@ class _LegalNoticeFooter extends StatelessWidget {
       child: PhoneAuthLegalNotice(
         legalConfig: legalConfig,
         themeColor: themeColor,
+      ),
+    );
+  }
+}
+
+class _CenteredFallbackPhoneNumberLayout extends StatelessWidget {
+  const _CenteredFallbackPhoneNumberLayout({
+    required this.controller,
+    required this.data,
+    required this.resolvedTheme,
+    required this.onChanged,
+    required this.onSubmitted,
+    required this.onSendOtpPressed,
+  });
+
+  final PhoneNumberInputController controller;
+  final PhoneNumberInputScreenData data;
+  final PhoneAuthResolvedTheme resolvedTheme;
+  final void Function(PhoneNumberResult result) onChanged;
+  final void Function(PhoneNumberResult result) onSubmitted;
+  final VoidCallback onSendOtpPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _FallbackHeaderSection(
+            title: data.title,
+            subtitle: data.subtitle,
+            resolvedTheme: resolvedTheme,
+          ),
+          _PhoneNumberFormSection(
+            controller: controller,
+            data: data,
+            resolvedTheme: resolvedTheme,
+            showPrompt: false,
+            showCountryPicker: data.showCountryPicker,
+            mainAxisAlignment: MainAxisAlignment.start,
+            onChanged: onChanged,
+            onSubmitted: onSubmitted,
+            onSendOtpPressed: onSendOtpPressed,
+          ),
+        ],
       ),
     );
   }

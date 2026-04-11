@@ -4,9 +4,8 @@ import 'app_info.dart';
 
 abstract final class PartnerPhoneAuthConfig {
   static const PhoneAuthConfig config = PhoneAuthConfig(
-    // appName: AppInfo.brandName,
+    appName: AppInfo.brandName,
     // tagLine: AppInfo.tagLine,
-    userPhoneAuth: true,
     apiConfig: PhoneAuthApiConfig(
       sendOtpEndpoint: '/partner/auth/send-otp',
       verifyOtpEndpoint: '/partner/auth/verify-otp',
